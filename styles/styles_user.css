@@ -41,7 +41,7 @@
 }
 
 .correct-border {
-   border: solid 2px var(--green);
+   outline: solid 2px var(--green);
 }
 
 .wrong {
@@ -49,7 +49,7 @@
 }
 
 .wrong-border {
-   border: solid 2px var(--red-light);
+   outline: solid 2px var(--red-light);
 }
 
 .quiz-question-container {
@@ -75,7 +75,7 @@
 .answers-container {
    display: flex;
    flex-direction: column;
-   gap: 1px;
+   gap: 8px;
 }
 
 .user-answer-text {

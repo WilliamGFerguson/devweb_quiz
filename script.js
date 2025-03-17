@@ -1,4 +1,26 @@
+/*
+Il reste encore des bugs et des éléments UI que j’aurais aimé améliorer, mais j’ai veillé à ce que l’application contienne au moins tous les éléments essentiels pour être relativement fonctionnelle.
+
+J’ai développé le code et l’interface utilisateur en anglais, tout en conservant les commentaires en français.
+J’ai également renommé les modes : Test → User et Edit → Admin.
+
+Résumé de la construction de l’application :
+- Une en-tête avec un bouton toggle pour basculer entre les modes User et Admin (toujours visible).
+- Un footer affichant le copyright (toujours visible).
+- Deux sections principales (div), l’une pour le mode User et l’autre pour le mode Admin.
+- J’utilise la classe CSS hidden pour masquer ou afficher ces sections.
+- L’ajout d’une question ne l’insère pas directement dans un tableau ; cela crée simplement une div avec des champs d’entrée (input).
+  Le stockage effectif se fait lors de l’enregistrement du quiz.
+- Le quiz est sauvegardé en JSON dans le localStorage au moment de l’enregistrement.
+- Une fois enregistré, il est possible de passer en mode User pour le tester.
+- La fonction qui démarre le quiz vérifie l’existence d’un quiz dans le localStorage. Si plusieurs quiz sont présents, elle utilise le 
+  premier trouvé. Avec plus de temps, j’aurais optimisé ce fonctionnement.
+- Idée de dernière minute, j’ai tenté de créer ma propre boîte de dialogue (alert) en utilisant un div nommé final-score pour la fin du quiz.
+  Ce n’est pas parfait, mais ça fonctionne.
+*/
+
 document.addEventListener("DOMContentLoaded", () => {
+   // Main UI
    const userPanel = document.querySelector(".user-main-container");
    const adminPanel = document.querySelector(".admin-main-container");
    const pageTitle = document.getElementById("pageTitle");
@@ -6,6 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
    const adminIcon = document.querySelector(".fa-user-shield");
    const toggleModeButton = document.getElementById("toggleMode");
 
+   // Admin
    const addQuestionButton = document.querySelector(".btn-add");
    const saveQuizButton = document.querySelector(".btn-save");
    const downloadButton = document.querySelector(".btn-download");
@@ -17,6 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
    const questionsContainer = document.querySelector(".questions-container");
    const noQuestionsContainer = document.querySelector(".no-questions-container");
 
+   // User
    const startQuizBtn = document.querySelector(".start");
    const quizTitleDisplay = document.querySelector(".quiz-title-display");
    const quizQuestion = document.querySelector(".quiz-question-title");
@@ -33,12 +57,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
    let isAdmin = false;
    let quizTitle = "";
-   
-   let questionCounter = 0;
    let userScore = 0;
+   let questionCounter = 0;
    let maximumScore = 0;
 
-   // Mode Admin/User
+   // UI en fonction du mode (admin/user)
    function updateDisplay() {
       pageTitle.textContent = isAdmin ? "Admin Mode" : "User Mode";
       userIcon.classList.toggle("current-user", !isAdmin);
@@ -56,6 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
    updateDisplay();
 
+   // Bouton pour changer entre les modes
    toggleModeButton.addEventListener("click", () => {
       isAdmin = !isAdmin;
       updateDisplay();
@@ -65,7 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
       noQuestionsContainer.classList.toggle("hidden", questionCounter !== 0);
    };
 
-   function updatequestionCounter() {
+   function updateQuestionCounter() {
       questionCounter = document.querySelectorAll(".question-item").length;
       noQuestionsContainer.classList.toggle("hidden", questionCounter !== 0);
    }
@@ -122,14 +146,17 @@ document.addEventListener("DOMContentLoaded", () => {
       let answerItem = document.createElement("div");
       answerItem.classList.add("answer-item");
 
+      // Si la div 'answerItem' n'est pas de type text, elle va contenir d'autres div answerOption
       if (type === "text") {
          answerItem.innerHTML = `<textarea class="answer-text-content" placeholder="Enter answer..."></textarea>`;
       } else {
          let answerOptionsContainer = document.createElement("div");
          answerOptionsContainer.classList.add("answer-options-container");
 
+         // Un premier answerOption est créer par défaut
          createAnswerOption(type === "single" ? "radio" : "checkbox", answerOptionsContainer, questionIndex);
 
+         // Bouton pour ajouter d'autre option de réponse
          let addAnswerButton = document.createElement("button");
          addAnswerButton.classList.add("add-answer-option");
          addAnswerButton.innerHTML = `<i class="fa-solid fa-plus"></i>Add option`;
@@ -144,9 +171,10 @@ document.addEventListener("DOMContentLoaded", () => {
       addEventListenersQuestions(questionItem);
       questionsContainer.appendChild(questionItem);
 
-      updatequestionCounter(); // Met à jour le nombre total de questions
+      updateQuestionCounter();
    }
 
+   // Créer une option de réponse selon le type (radio ou checkbox)
    function createAnswerOption(type, answerOptionsContainer, questionIndex) {
       let newAnswerOption = document.createElement("div")
       newAnswerOption.classList.add("answer-option")
@@ -163,6 +191,7 @@ document.addEventListener("DOMContentLoaded", () => {
          <button class="delete-answer-btn"><i class="fa-solid fa-xmark"></i></button>
       `;
 
+      // Bouton pour supprimer l'option de réponse
       newAnswerOption.querySelector(".delete-answer-btn").addEventListener("click", () => {
          newAnswerOption.remove();
       });
@@ -170,6 +199,7 @@ document.addEventListener("DOMContentLoaded", () => {
       answerOptionsContainer.append(newAnswerOption)
    };
 
+   // Ajouter les event listeners aux boutons d'une question
    function addEventListenersQuestions(questionItem) {
       const questionUpButton = questionItem.querySelector(".question-up");
       const questionDownButton = questionItem.querySelector(".question-down");
@@ -198,7 +228,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
    function deleteQuestionItem(questionItem) {
       questionItem.remove();
-      updatequestionCounter();
+      updateQuestionCounter();
       updateQuestionIndexes();
    }
 
@@ -210,12 +240,14 @@ document.addEventListener("DOMContentLoaded", () => {
    }
 
    function saveQuiz() {
-      // Supprimer les erreurs visuelles précédentes
+      let questions = [];
+
+      // Supprimer les erreurs visuelles précédentes sur tous les inputs
       document.querySelectorAll(".input-error").forEach(input => input.classList.remove("input-error"));
 
-      let questions = [];
+      // Au lieu de prendre la valeur directement du querySelector, je le sépare en 2 variable pour permettre d'ajouter la classe CSS input-error
       let quizTitleInput = document.querySelector(".admin-quiz-title");
-      quizTitle = quizTitleInput ? quizTitleInput.value.trim() : "";
+      quizTitle = quizTitleInput.value.trim();
 
       // Vérification du titre du quiz
       if (!quizTitle) {
@@ -251,6 +283,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
          }
 
+         // Opération ternaire imbriqué... je ne pense pas que ce soit une bonne pratique, mais ça a fonctionné pour mon besoin
          let answerElement = questionItem.querySelector(".answer-item");
          let questionType = answerElement.querySelector("textarea") ? "text" :
                             answerElement.querySelector("input[type='radio']") ? "single" :
@@ -332,6 +365,7 @@ document.addEventListener("DOMContentLoaded", () => {
    }
 
    function generatePDF() {
+      // Nom de fichier par défaut si le quiz n'a pas de titre
       let quizTitle = document.querySelector(".admin-quiz-title")?.value.trim() || "Quiz - No Name";
 
       let questions = [];
@@ -421,6 +455,9 @@ document.addEventListener("DOMContentLoaded", () => {
    startQuizBtn.addEventListener("click", startQuiz)
 
    function startQuiz() {
+      let currentQuestionIndex = 0;
+      userScore = 0; // Réinitialisation du score utilisateur
+      questionCounter = 0; // Réinitialisation du compteur de questions
       let quizData = null;
 
       // Parcourir le localStorage pour trouver un quiz
@@ -440,15 +477,13 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       if (!quizData) {
-         alert("Quiz not found. Please save the quiz before starting.");
+         alert("No quiz found in localStorage.\n\nUse the toggle button to switch to 'Admin' mode.");
          return;
       }
 
       let quizTitle = quizData.title;
       let totalQuestions = quizData.questions.length;
       maximumScore = calculateQuizScore(quizData);
-      userScore = 0; // Réinitialisation du score utilisateur
-      questionCounter = 0; // Réinitialisation du compteur de questions
 
       if (!quizData.questions || totalQuestions === 0) {
          alert("No questions in this quiz.");
@@ -459,7 +494,7 @@ document.addEventListener("DOMContentLoaded", () => {
       document.querySelector(".quiz-game-container").classList.toggle("hidden");
 
       quizTitleDisplay.textContent = quizTitle;
-      let currentQuestionIndex = 0;
+      
       displayQuestion(quizData.questions, currentQuestionIndex);
 
       submitAnswerBtn.addEventListener("click", () => {
