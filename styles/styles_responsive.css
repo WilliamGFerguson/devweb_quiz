@@ -1,0 +1,34 @@
+@media (max-width: 1170px) {
+   header {
+      justify-content: start;
+      padding-left: 20px;
+   }
+
+   .question-title {
+      gap: 5px;
+   }
+
+   .question-actions {
+      right: 0;
+   }
+
+   .admin-quiz-actions {
+      flex-direction: column;
+      gap: 10px;
+   }
+
+   .weighting-container {
+      gap: 0;
+      width: min-content;
+   }
+
+   .chose-question-type {
+      position: relative;
+      top: 0;
+      left: 60px;
+   }
+
+   .quiz-game-container {
+      width: 80%;
+   }
+ }

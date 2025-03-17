@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Quiz</title>
+      <link
+         rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+         integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+         crossorigin="anonymous" referrerpolicy="no-referrer"
+      />
+      <link rel="preconnect" href="https://fonts.googleapis.com"/>
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+      <link
+         href="https://fonts.googleapis.com/css2?family=Raleway:wght@100..900&family=Red+Hat+Text:wght@300..700&display=swap"
+         rel="stylesheet"
+      />
+      <link rel="stylesheet" href="styles/styles_main.css">
+      <link rel="stylesheet" href="styles/styles_admin.css">
+      <link rel="stylesheet" href="styles/styles_user.css">
+      <link rel="stylesheet" href="styles/styles_button.css">
+      <link rel="stylesheet" href="styles/styles_responsive.css">
+</head>
+<body>
+   <!-- HEADER -->
+   <header>
+      <!-- page title -->
+      <h2 id="pageTitle">User Mode</h2>
+
+      <!-- user toggle mode  -->
+      <div class="toggle-mode-container header-toggle">
+         <i class="fa-solid fa-user" id="userIcon" aria-label="Mode utilisateur"></i>
+         <button class="toggle-button" id="toggleMode">
+            <div class="toggle-button-circle"></div>
+         </button>
+         <i class="fa-solid fa-user-shield" id="adminIcon" aria-label="Admin mode"></i>
+      </div>
+   </header>
+
+   <div class="final-score-body hidden">
+      <div class="final-score-container">
+         <h1 class="final-score"></h1>
+         <button class="end-quiz-btn restart">Restart</button>
+         <button class="end-quiz-btn edit">Edit</button>
+      </div>
+   </div>
+
+   <!-- USER -->
+   <div class="user-main-container">
+      <button class="quiz-button start">Start Quiz</button>
+
+      <!-- quiz game container -->
+      <div class="quiz-game-container hidden">
+         <h1 class="quiz-title-display"></h1>
+         <!-- progression bar -->
+         <div class="progression-bar">
+            <div class="done"></div>
+         </div>
+
+         <div class="quiz-question-container">
+            <p class="quiz-question-tracker"></p>
+
+            <!-- quiz title -->
+            <h2 class="quiz-question-title">
+               This is the question
+            </h2>
+
+            <div class="answers-container">
+            </div>
+
+            <div class="quiz-bottom-container">
+               <div class="answer-result-container">
+                  <!-- correct -->
+                  <div class="answer-result correct hidden">
+                     <i class="fa-solid fa-check"></i>
+                     <h4>Correct</h4>
+                  </div>
+                  <!-- wrong -->
+                  <div class="answer-result wrong hidden">
+                     <i class="fa-solid fa-xmark"></i>
+                     <h4>Wrong</h4>
+                  </div>
+               </div>
+
+               <button class="quiz-button submit-btn">Submit</button>
+               <button class="quiz-button next-btn hidden">Next</button>
+            </div>
+         </div>
+      </div>
+   </div>
+
+   <!-- ADMIN -->
+   <div class="admin-main-container hidden">
+      <!-- quiz title -->
+      <input type="text" class="admin-quiz-title" placeholder="Quiz Name...">
+
+      <div class="no-questions-container hidden">
+         <p>Click 'Add question' to create a new question</p>
+      </div>
+      
+      <!-- questions are added here -->
+      <div class="questions-container"></div>
+
+      <!--   quiz actions  -->
+      <div class="admin-quiz-actions">
+         <!-- add -->
+         <button class="quiz-actions-button btn-add">
+            <i class="fa-solid fa-plus"></i>
+            <p>Add question</p>
+         </button>
+         <div class="chose-question-type hidden">
+            <button id="addTextQuestion">Text</button>
+            <button id="addSingleChoice">Single</button>
+            <button id="addMultipleChoice">Multiple</button>
+         </div>
+         <!-- save -->
+         <button class="quiz-actions-button btn-save">
+            <i class="fa-solid fa-floppy-disk"></i>
+            <p>Save</p>
+         </button>
+         <!-- reset -->
+         <button class="quiz-actions-button btn-reset">
+            <i class="fa-solid fa-trash"></i>
+            <p>Reset Quiz</p>
+         </button>
+         <!-- reset -->
+         <button class="quiz-actions-button btn-download">
+            <i class="fa-solid fa-download"></i>
+            <p>Export PDF</p>
+         </button>
+      </div>
+   </div>
+
+   <!-- FOOTER -->
+   <footer class="footer">
+      <p>&copy; 2025 William Gagnon-Ferguson</p>
+   </footer>
+
+   <script src="script.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+</body>
+</html>

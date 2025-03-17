@@ -1,0 +1,84 @@
+:root {
+   --dark-1: #111213;
+   --dark-2: #181a1b;
+   --dark-3: #222426;
+   --dark-4: #2d2e31;
+   --dark-5: #7e8086;
+   --light: #f1ede8;
+   --light-2: #d3ceca;
+   --light-3: #9c968f;
+   --red-light: #db2626;
+   --orange: #ffcc00;
+   --green: #85de67;
+   --blue: #509ddc;
+}
+
+.hidden {
+   display: none;
+}
+
+.input-error {
+   outline: solid 1px var(--red-light);
+   box-shadow: 0px 0px 10px red;
+}
+
+* {
+   font-family: "Red Hat Text", serif;
+   padding: 0;
+   margin: 0;
+   box-sizing: border-box;
+   transition: all 0.1s ease;
+}
+
+body {
+   background-color: var(--dark-1);
+   overflow-y: scroll;
+}
+
+input, textarea {
+   color: var(--light);
+   font-size: 15px;
+   padding: 8px;
+   border: none;
+   border-radius: 4px;
+   background: none;
+}
+
+input[type="text"]:hover {
+   background-color: var(--dark-4);
+}
+
+input:focus, textarea:focus {
+   outline: none;
+   box-shadow: none;
+}
+
+textarea {
+   resize: none;
+   border: solid 1px var(--dark-4);
+}
+
+/* Cacher les flèches des inputs de type "number" */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+header {
+   color: var(--light);
+   height: 80px;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   flex-wrap: wrap;
+   position: relative;
+}
+
+footer {
+   width: 100%;
+   height: 50px;
+   margin-top: 30px;
+   color: var(--light);
+   text-align: center;
+}
