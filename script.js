@@ -278,7 +278,7 @@ document.addEventListener("DOMContentLoaded", () => {
          // Vérification de la pondération
          if (!questionWeight) {
             questionWeightInput.classList.add("input-error")
-            alert(`Question ${index + 1}: Must have a wighting.`);
+            alert(`Question ${index + 1}: Must have a weighting.`);
             isValid = false;
             return;
          }
@@ -472,7 +472,7 @@ document.addEventListener("DOMContentLoaded", () => {
                   break; // On prend le premier quiz trouvé
                }
          } catch (e) {
-               console.warn(`Impossible de lire les données de ${key}`);
+               console.warn(`Can't read data of ${key}`);
          }
       }
 
